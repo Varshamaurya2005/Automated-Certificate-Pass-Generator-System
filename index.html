@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Certificate Generator</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Parisienne&family=Pinyon+Script&family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Export & QR Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Controls -->
+        <div class="sidebar">
+            <h2>Certificate Suite</h2>
+            <div class="section export-buttons">
+                <button id="downloadPdfBtn" class="btn btn-primary">Download PDF</button>
+                <button id="downloadPngBtn" class="btn btn-secondary">Download PNG</button>
+                <button id="printCertBtn" class="btn btn-accent">Print</button>
+                <button id="shareWhatsappBtn" class="btn btn-whatsapp">Share WhatsApp</button>
+                <button id="shareEmailBtn" class="btn btn-email">Share Gmail</button>
+            </div>
+            
+            <!-- 1. Category & Certificate Type -->
+            <div class="section">
+                <h3>1. Category & Template Type</h3>
+                <label>Select Category (Course / Sports):</label>
+                <select id="categorySelect">
+                    <option value="course" selected>📚 Course / Academic / Workshop</option>
+                    <option value="sport">🏅 Sports / Athletic Competition</option>
+                </select>
+                <label>Certificate Layout Type:</label>
+                <select id="certTypeSelect">
+                    <option value="layout-ribbon">1. Maroon Ribbon Header</option>
+                    <option value="layout-diagonal">2. Dark Diagonal Red/Gold</option>
+                    <option value="layout-corporate">3. Classic Corporate Border</option>
+                    <option value="layout-modern-blue">4. Modern Teal/Blue Split</option>
+                    <option value="layout-dark-pattern">5. Black Gold Pattern</option>
+                    <option value="layout-blue-curve">6. Blue & Gold Curved</option>
+                    <option value="layout-magenta-curve">7. Dark Magenta Wave</option>
+                    <option value="layout-floral">8. Botanical Floral Frame</option>
+                    <option value="layout-green-wave">9. Green & Orange Abstract</option>
+                    <option value="layout-gold-frame">10. Ornate Gold Frame</option>
+                </select>
+                <label>Certificate Type / Achievement Type:</label>
+                <select id="achievementTypeSelect">
+                    <!-- Dynamically populated via JS -->
+                </select>
+                <label>Theme Color Palette:</label>
+                <select id="themeSelect">
+                    <option value="theme-gold">Luxury Gold & Maroon</option>
+                    <option value="theme-navy">Royal Navy Blue</option>
+                    <option value="theme-emerald">Vintage Emerald Green</option>
+                    <option value="theme-dark-obsidian">Obsidian & Crimson</option>
+                    <option value="theme-royal-purple">Deep Royal Purple</option>
+                    <option value="theme-slate">Slate & Monochrome</option>
+                </select>
+            </div>
+
+            <!-- 2. Institution & Event Details -->
+            <div class="section">
+                <h3>2. Institution & Event Details</h3>
+                <label>Organization / Institution Name:</label>
+                <input type="text" id="institutionInput" value="GLOBAL INSTITUTE OF TECHNOLOGY & MANAGEMENT">
+                <label>Event / Course / Sport Name:</label>
+                <input type="text" id="eventTitleInput" value="Advanced Full-Stack Development Program">
+                <div id="courseDetailsGroup">
+                    <label>Duration:</label>
+                    <select id="durationSelect">
+                        <option value="30 Days">30 Days</option>
+                        <option value="40 Days">40 Days</option>
+                        <option value="50 Days">50 Days</option>
+                        <option value="60 Days" selected>60 Days</option>
+                        <option value="3 Months">3 Months</option>
+                        <option value="6 Months">6 Months</option>
+                        <option value="1 Year">1 Year</option>
+                    </select>
+                    <label>Mode:</label>
+                    <select id="modeSelect">
+                        <option value="Online" selected>Online</option>
+                        <option value="Offline">Offline</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <label>Recipient Full Name (Student Name):</label>
+                <input type="text" id="studentNameInput" value="Mr. Alex Morgan">
+                <label>Event Date:</label>
+                <input type="date" id="eventDateInput" value="2026-09-25">
+                <label>Issue Date:</label>
+                <input type="date" id="issueDateInput" value="2026-09-25">
+                <label>Certificate ID:</label>
+                <input type="text" id="certIdInput" value="GITM/2026/CERT-9842">
+            </div>
+
+            <!-- 3. Batch Processing & Local Storage History Section -->
+            <div class="section">
+                <h3>3. Batch Processing & History</h3>
+                <label>Upload CSV File for Bulk Generation:</label>
+                <input type="file" id="csvUpload" accept=".csv">
+                <small style="color: #aaa; font-size: 10px; display: block; margin-top: 3px;">Format: Name, CertID, IssueDate</small>
+                <button id="viewHistoryBtn" class="btn btn-accent" style="width: 100%; margin-top: 10px;">View Generated History</button>
+            </div>
+
+            <!-- 4. Typography Controls -->
+            <div class="section">
+                <h3>4. Student Name Typography</h3>
+                <label>Calligraphy Font:</label>
+                <select id="fontSelect">
+                    <option value="'Great Vibes', cursive">Great Vibes</option>
+                    <option value="'Alex Brush', cursive">Alex Brush</option>
+                    <option value="'Pinyon Script', cursive">Pinyon Script</option>
+                    <option value="'Parisienne', cursive">Parisienne</option>
+                </select>
+                <label>Font Size (px):</label>
+                <input type="range" id="fontSizeSlider" min="36" max="75" value="50">
+                <label>Font Color:</label>
+                <input type="color" id="fontColorPicker" value="#111111">
+            </div>
+
+            <!-- 5. Ornaments & Watermark -->
+            <div class="section">
+                <h3>5. Ornaments & Watermark</h3>
+                <label><input type="checkbox" id="ornamentToggle" checked> Show Corner Ornaments</label>
+                <label>Organization Logo Upload:</label>
+                <input type="file" id="logoUpload" accept="image/*">
+                <label>Watermark Opacity:</label>
+                <input type="range" id="watermarkOpacitySlider" min="0.05" max="0.5" step="0.05" value="0.12">
+                <label>Watermark Image Upload:</label>
+                <input type="file" id="watermarkUpload" accept="image/*">
+            </div>
+
+            <!-- 6. Signatures & Authorities -->
+            <div class="section">
+                <h3>6. Signatures & Authorities</h3>
+                <label>Signatory 1 Name (Event Head):</label>
+                <input type="text" id="headNameInput" value="Dr. Sarah Jenkins">
+                <label>Signatory 1 Designation:</label>
+                <input type="text" id="headDesigInput" value="Event Head / Coordinator">
+                <label>Signatory 1 Signature Image:</label>
+                <input type="file" id="headSignUpload" accept="image/*">
+                <label>Signatory 2 Name (Principal):</label>
+                <input type="text" id="principalNameInput" value="Prof. Robert Vance">
+                <label>Signatory 2 Designation:</label>
+                <input type="text" id="principalDesigInput" value="Principal / Director">
+                <label>Signatory 2 Signature Image:</label>
+                <input type="file" id="principalSignUpload" accept="image/*">
+                <label>Official Stamp Upload:</label>
+                <input type="file" id="stampUpload" accept="image/*">
+            </div>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="preview-area">
+            <div class="canvas-scaler">
+                <div id="certificate" class="certificate-container layout-ribbon theme-gold">
+                    <div class="curved-watermark-container">
+                        <svg viewBox="0 0 1000 600" width="100%" height="100%">
+                            <path id="curvePath" d="M 120,380 C 120,180 880,180 880,380" fill="transparent" />
+                            <text width="1000">
+                                <textPath href="#curvePath" startOffset="50%" text-anchor="middle" id="curvedTextSvg">
+                                    GLOBAL INSTITUTE OF TECHNOLOGY & MANAGEMENT
+                                </textPath>
+                            </text>
+                        </svg>
+                    </div>
+                    <div class="corner-ornament top-left"></div>
+                    <div class="corner-ornament top-right"></div>
+                    <div class="corner-ornament bottom-left"></div>
+                    <div class="corner-ornament bottom-right"></div>
+                    <div id="watermarkLayer" class="watermark-layer"></div>
+                    <div class="layout-bg-header"></div>
+                    <div class="layout-side-bar-left"></div>
+                    <div class="layout-side-bar-right"></div>
+                    <div class="layout-inner-border"></div>
+                    
+                    <div class="cert-content-box">
+                        <div class="header-section">
+                            <div class="logo-area">
+                                <img id="institutionLogo" src="" alt="Logo" class="hidden">
+                            </div>
+                            <div class="gold-ribbon-banner">
+                                <h2 id="dispCertSubtitle">CERTIFICATE OF COURSE COMPLETION</h2>
+                            </div>
+                            <p id="dispInstitution">Global Institute of Technology & Management</p>
+                        </div>
+                        <div class="body-section">
+                            <p class="present-text">PROUDLY PRESENTED TO</p>
+                            <h1 id="certStudentName">Mr. Alex Morgan</h1>
+                            <p id="certDescription">For successfully completing the Advanced Full-Stack Development Program with dedication, commitment, and demonstrated proficiency.</p>
+                            <p class="event-badge-label"><strong id="dispEventTitle">Advanced Full-Stack Development Program</strong></p>
+                            <p id="courseMetaContainer" class="duration-mode-text">Duration: <span id="dispDuration">60 Days</span> | Mode: <span id="dispMode">Online</span></p>
+                        </div>
+                        <div class="footer-section">
+                            <div class="signature-block">
+                                <div class="sig-img-wrap">
+                                    <img id="headSignImg" src="" alt="Head Sign" class="hidden">
+                                </div>
+                                <div class="line"></div>
+                                <p id="dispHeadName">Dr. Sarah Jenkins</p>
+                                <span id="dispHeadDesig">Event Head / Coordinator</span>
+                            </div>
+                            <div class="center-security-block">
+                                <div id="stampContainer" class="stamp-wrap">
+                                    <img id="stampImg" src="" alt="Official Stamp" class="hidden">
+                                </div>
+                                <div class="qr-verification-group">
+                                    <div id="qrcode" class="qr-code-box"></div>
+                                    <small class="qr-text">Scan to Verify Certificate</small>
+                                </div>
+                            </div>
+                            <div class="signature-block">
+                                <div class="sig-img-wrap">
+                                    <img id="principalSignImg" src="" alt="Principal Sign" class="hidden">
+                                </div>
+                                <div class="line"></div>
+                                <p id="dispPrincipalName">Prof. Robert Vance</p>
+                                <span id="dispPrincipalDesig">Principal / Director</span>
+                            </div>
+                        </div>
+                        <div class="meta-footer">
+                            <span>Certificate ID: <strong id="dispCertId">GITM/2026/CERT-9842</strong></span>
+                            <span>Event Date: <strong id="dispEventDate">25 September 2026</strong></span>
+                            <span>Issue Date: <strong id="dispIssueDate">25 September 2026</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal Popup (Fixed display property) -->
+    <div id="historyModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:none; align-items:center; justify-content:center;">
+        <div style="background:#1e1e1e; padding:25px; border-radius:8px; width:750px; max-height:80vh; overflow-y:auto; color:#f1f1f1; border:1px solid #d4af37;">
+            <h3 style="color:#d4af37; margin-bottom:15px; text-transform:uppercase;">Generated Certificates History</h3>
+            <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                <thead>
+                    <tr style="border-bottom:2px solid #444; text-align:left; color:#bfa15f;">
+                        <th style="padding:8px;">Student Name</th>
+                        <th style="padding:8px;">Event / Course</th>
+                        <th style="padding:8px;">Certificate ID</th>
+                        <th style="padding:8px;">Issue Date</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+            <button id="closeHistoryBtn" class="btn btn-primary" style="margin-top:20px; width:100%;">Close History</button>
+        </div>
+    </div>
+
+    <!-- Script Files -->
+    <script src="js/app.js"></script>
+    <script src="js/pdf-generator.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Credential Verification Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; padding: 40px; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { width: 100%; max-width: 600px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 15px; }
+        .info-label { font-weight: bold; color: #444; }
+        .info-value { color: #222; text-align: right; }
+        .status-box { margin-top: 25px; text-align: center; background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Credential Verification</h2>
+        <div class="subtitle">Automated Certificate & Pass Generator System</div>
+        
+        <div class="info-row">
+            <span class="info-label">Certificate Holder:</span>
+            <span class="info-value" id="holderName">Nilu Jiyalal Rajbhar</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Event / Course Title:</span>
+            <span class="info-value" id="eventTitle">Web Development Masterclass</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Unique Certificate ID:</span>
+            <span class="info-value" id="certId">GITM-2026-CERT-9842</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Issue Date:</span>
+            <span class="info-value" id="issueDate">2026-03-30</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Issuing Institution:</span>
+            <span class="info-value">GITM Department of Computer Science</span>
+        </div>
+
+        <div class="status-box">
+            ✓ Status: Authentic & Verified
+        </div>
+    </div>
+
+    <script>
+        // URL parameters se dynamic data uthane ka code
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const nameParam = urlParams.get('name');
+        const eventParam = urlParams.get('event');
+        const idParam = urlParams.get('id');
+        const dateParam = urlParams.get('date');
+
+        if (nameParam) document.getElementById('holderName').innerText = decodeURIComponent(nameParam);
+        if (eventParam) document.getElementById('eventTitle').innerText = decodeURIComponent(eventParam);
+        if (idParam) document.getElementById('certId').innerText = idParam;
+        if (dateParam) document.getElementById('issueDate').innerText = dateParam;
+    </script>
+</body>
+</html>
