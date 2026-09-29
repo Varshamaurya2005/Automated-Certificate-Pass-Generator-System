@@ -1,0 +1,31 @@
+-- Database Creation & Table Schema for history.db
+
+CREATE TABLE IF NOT EXISTS recipients (
+    recipient_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    full_name TEXT NOT NULL,
+    designation TEXT NOT NULL,
+    event_title TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS verification_logs (
+    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    recipient_id INTEGER,
+    unique_hash TEXT UNIQUE NOT NULL,
+    verification_status TEXT DEFAULT 'Valid',
+    FOREIGN KEY (recipient_id) REFERENCES recipients(recipient_id)
+);
+
+-- Sample Insert Query (Executed when generating a certificate)
+INSERT INTO recipients (full_name, designation, event_title) 
+VALUES ('Nilu Jiyalal Rajbhar', 'Participant', 'Annual Technical Symposium 2026');
+
+-- Sample Log Query with Unique Hash
+INSERT INTO verification_logs (recipient_id, unique_hash, verification_status) 
+VALUES (1, 'GITM-2026-CERT-9842', 'Valid');
+
+-- History Search & Filter Query (To search past records)
+SELECT r.full_name, r.event_title, l.unique_hash, r.created_at 
+FROM recipients r 
+JOIN verification_logs l ON r.recipient_id = l.recipient_id 
+WHERE r.full_name LIKE '%Nilu%';
